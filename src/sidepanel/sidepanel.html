@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PDF Compressor</title>
+  <link rel="stylesheet" href="sidepanel.css">
+</head>
+<body>
+  <div class="container">
+    <h1>PDF Compressor</h1>
+    
+    <div id="file-selector" class="section">
+      <input type="file" id="file-input" accept=".pdf,application/pdf" />
+      <label for="file-input" class="file-label">Выберите PDF файл</label>
+    </div>
+
+    <div id="progress-section" class="section hidden">
+      <div class="progress-bar">
+        <div id="progress-fill" class="progress-fill"></div>
+      </div>
+      <p id="progress-status" class="status-text"></p>
+    </div>
+
+    <div id="results-section" class="section hidden">
+      <h2>Результаты сжатия</h2>
+      <div class="results-info">
+        <p>Исходный размер: <span id="original-size"></span></p>
+        <p>Сжатый размер: <span id="compressed-size"></span></p>
+        <p>Уменьшение: <span id="compression-ratio"></span></p>
+      </div>
+      <button id="download-btn" class="btn btn-primary">Скачать сжатый PDF</button>
+    </div>
+
+    <div id="error-section" class="section hidden">
+      <div class="error-message">
+        <p id="error-text"></p>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="sidepanel.js"></script>
+</body>
+</html>
