@@ -5,7 +5,6 @@ import { FileHandler as IFileHandler, ValidationResult, ErrorCode } from '../typ
  * Handles file validation, reading, downloading, and cleanup
  */
 export class FileHandler implements IFileHandler {
-  private readonly MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB limit
   private readonly VALID_PDF_MIME_TYPE = 'application/pdf';
   private readonly VALID_PDF_EXTENSION = '.pdf';
   
@@ -32,14 +31,6 @@ export class FileHandler implements IFileHandler {
       return {
         isValid: false,
         error: 'Файл пустой'
-      };
-    }
-
-    // Check if file is too large
-    if (file.size > this.MAX_FILE_SIZE) {
-      return {
-        isValid: false,
-        error: `Файл слишком большой. Максимальный размер: ${this.MAX_FILE_SIZE / (1024 * 1024)}MB`
       };
     }
 
