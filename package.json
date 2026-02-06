@@ -1,7 +1,7 @@
 {
   "name": "pdf-compressor-extension",
   "version": "1.2.0",
-  "description": "Chrome extension for compressing PDF files locally",
+  "description": "PDF compress tool that works locally. No server upload. Compress PDF files 50-80% instantly. Private, fast, secure.",
   "type": "module",
   "scripts": {
     "dev": "wxt",

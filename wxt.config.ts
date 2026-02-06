@@ -5,9 +5,9 @@ import path from 'path';
 export default defineConfig({
   modules: ['@wxt-dev/module-vue'],
   manifest: {
-    name: 'PDF Compressor',
+    name: 'PDF Compress - Local Tool',
     version: '1.2.0',
-    description: 'Compress PDF files locally in your browser',
+    description: 'PDF compress tool that works locally. No server upload. Compress PDF files 50-80% instantly. Private, fast, secure.',
     action: {
       default_title: 'Open PDF Compressor',
     },

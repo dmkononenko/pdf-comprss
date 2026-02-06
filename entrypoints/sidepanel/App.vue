@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import type { CompressionResult, ErrorInfo } from '../../src/types'
+import { CompressionLevel, COMPRESSION_PRESETS, type CompressionLevel as CompressionLevelType } from '../../src/types'
 import { formatFileSize, addCompressedSuffix } from '../../src/utils/formatters'
 import ThemeToggle from '../../src/components/ThemeToggle.vue'
+import CompressionLevelSelector from '../../src/components/CompressionLevelSelector.vue'
 
 // UI State
 const currentSection = ref<'selector' | 'progress' | 'results' | 'error'>('selector')
@@ -17,6 +19,9 @@ const errorMessage = ref('')
 const fileInput = ref<HTMLInputElement>()
 const downloadData = ref<{ file: Blob; filename: string } | null>(null)
 const isDragging = ref(false)
+
+// Compression level
+const compressionLevel = ref<CompressionLevelType>(CompressionLevel.MEDIUM)
 
 // Services (lazy loaded)
 let fileHandler: any = null
@@ -67,12 +72,7 @@ async function compressFile(file: File) {
     progress.value = 50
     progressStatus.value = 'Compressing PDF...'
 
-    const compressionResult = await compressionEngine.compressPDF(fileData, {
-      imageQuality: 70,
-      imageScale: 1.0,
-      removeMetadata: true,
-      optimizeStructure: true
-    })
+    const compressionResult = await compressionEngine.compressPDF(fileData, COMPRESSION_PRESETS[compressionLevel.value])
 
     if (!compressionResult.success) {
       throw new Error(compressionResult.error || 'Compression failed')
@@ -144,6 +144,7 @@ function reset() {
   if (fileInput.value) {
     fileInput.value.value = ''
   }
+  // Note: compressionLevel is not reset as it's saved in localStorage
 }
 
 // Drag and drop handlers
@@ -228,6 +229,9 @@ async function processFile(file: File) {
         <h1 class="text-xl font-bold text-gray-900 dark:text-neutral-100">PDF Compressor</h1>
         <ThemeToggle />
       </div>
+
+      <!-- Compression Level Selector -->
+      <CompressionLevelSelector v-model="compressionLevel" class="mb-4" />
 
       <!-- File Selector -->
       <div v-show="currentSection === 'selector'" class="space-y-4">

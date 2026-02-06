@@ -1,1 +1,0 @@
-var R=(I=>(I.IDLE="idle",I.VALIDATING="validating",I.LOADING="loading",I.COMPRESSING="compressing",I.COMPLETED="completed",I.ERROR="error",I))(R||{}),_=(I=>(I.INVALID_FILE_TYPE="invalid_file_type",I.CORRUPTED_PDF="corrupted_pdf",I.COMPRESSION_FAILED="compression_failed",I.UNKNOWN_ERROR="unknown_error",I))(_||{});export{R as C,_ as E};

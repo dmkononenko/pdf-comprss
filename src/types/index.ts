@@ -32,6 +32,33 @@ export interface CompressionOptions {
   optimizeStructure: boolean;
 }
 
+export enum CompressionLevel {
+  LOW = 'low',      // light compression
+  MEDIUM = 'medium', // medium compression
+  HIGH = 'high'      // heavy compression
+}
+
+export const COMPRESSION_PRESETS: Record<CompressionLevel, CompressionOptions> = {
+  [CompressionLevel.LOW]: {
+    imageQuality: 85,
+    imageScale: 1.0,
+    removeMetadata: true,
+    optimizeStructure: true
+  },
+  [CompressionLevel.MEDIUM]: {
+    imageQuality: 70,
+    imageScale: 1.0,
+    removeMetadata: true,
+    optimizeStructure: true
+  },
+  [CompressionLevel.HIGH]: {
+    imageQuality: 50,
+    imageScale: 0.75,
+    removeMetadata: true,
+    optimizeStructure: true
+  }
+}
+
 export interface CompressionResult {
   compressedData: Uint8Array;
   originalSize: number;
