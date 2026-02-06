@@ -4,24 +4,44 @@
   "description": "Chrome extension for compressing PDF files locally",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
+    "dev": "wxt",
+    "dev:firefox": "wxt -b firefox",
+    "build": "wxt build",
+    "build:firefox": "wxt build -b firefox",
+    "zip": "wxt zip",
+    "zip:firefox": "wxt zip -b firefox",
+    "compile": "wxt compile --mode production",
     "test": "vitest --run",
     "test:watch": "vitest",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
+    "@vueuse/core": "^14.2.0",
     "pdf-lib": "^1.17.1",
-    "pdfjs-dist": "^5.4.449"
+    "pdfjs-dist": "^5.4.449",
+    "radix-vue": "^1.9.17",
+    "reka-ui": "^2.8.0",
+    "vue": "^3.5.27"
   },
   "devDependencies": {
     "@types/chrome": "^0.0.254",
     "@types/node": "^20.10.5",
+    "@vitejs/plugin-vue": "^6.0.4",
+    "@wxt-dev/module-vue": "^1.0.3",
+    "autoprefixer": "^10.4.24",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
     "fast-check": "^3.15.0",
     "jsdom": "^27.2.0",
+    "postcss": "^8.5.6",
+    "shadcn-vue": "^2.4.3",
+    "tailwind-merge": "^3.4.0",
+    "tailwindcss": "^3.4.19",
+    "tailwindcss-animate": "^1.0.7",
     "typescript": "^5.3.3",
     "vite": "^5.0.8",
     "vite-plugin-static-copy": "^1.0.0",
-    "vitest": "^1.1.0"
+    "vitest": "^1.1.0",
+    "wxt": "^0.20.14"
   }
 }

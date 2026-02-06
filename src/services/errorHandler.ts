@@ -28,16 +28,7 @@ export class ErrorHandler {
       if (message.includes('invalid') || message.includes('неверный тип')) {
         return {
           code: ErrorCode.INVALID_FILE_TYPE,
-          message: 'Неверный тип файла. Пожалуйста, выберите PDF файл',
-          details: error.message
-        };
-      }
-
-      // Check for file too large errors
-      if (message.includes('too large') || message.includes('слишком большой')) {
-        return {
-          code: ErrorCode.FILE_TOO_LARGE,
-          message: 'Файл слишком большой для обработки. Максимальный размер: 50MB',
+          message: 'Invalid file type. Please select a PDF file',
           details: error.message
         };
       }
@@ -52,7 +43,7 @@ export class ErrorHandler {
       ) {
         return {
           code: ErrorCode.CORRUPTED_PDF,
-          message: 'Файл поврежден или имеет неподдерживаемый формат',
+          message: 'File is corrupted or has an unsupported format',
           details: error.message
         };
       }
@@ -65,7 +56,7 @@ export class ErrorHandler {
       ) {
         return {
           code: ErrorCode.COMPRESSION_FAILED,
-          message: 'Не удалось сжать файл. Попробуйте другой PDF файл',
+          message: 'Failed to compress file. Try another PDF file',
           details: error.message
         };
       }
@@ -73,7 +64,7 @@ export class ErrorHandler {
       // Default error for Error objects
       return {
         code: ErrorCode.UNKNOWN_ERROR,
-        message: 'Произошла неизвестная ошибка. Попробуйте снова',
+        message: 'An unknown error occurred. Try again',
         details: error.message
       };
     }
@@ -102,16 +93,6 @@ export class ErrorHandler {
     return {
       code: ErrorCode.INVALID_FILE_TYPE,
       message: 'Неверный тип файла. Пожалуйста, выберите PDF файл'
-    };
-  }
-
-  /**
-   * Creates an ErrorInfo object for file too large
-   */
-  createFileTooLargeError(maxSizeMB: number): ErrorInfo {
-    return {
-      code: ErrorCode.FILE_TOO_LARGE,
-      message: `Файл слишком большой для обработки. Максимальный размер: ${maxSizeMB}MB`
     };
   }
 

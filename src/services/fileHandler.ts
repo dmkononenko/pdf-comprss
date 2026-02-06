@@ -22,7 +22,7 @@ export class FileHandler implements IFileHandler {
     if (!file) {
       return {
         isValid: false,
-        error: 'Файл не выбран'
+        error: 'File not selected'
       };
     }
 
@@ -30,7 +30,7 @@ export class FileHandler implements IFileHandler {
     if (file.size === 0) {
       return {
         isValid: false,
-        error: 'Файл пустой'
+        error: 'File is empty'
       };
     }
 
@@ -38,7 +38,7 @@ export class FileHandler implements IFileHandler {
     if (file.type !== this.VALID_PDF_MIME_TYPE) {
       return {
         isValid: false,
-        error: 'Неверный тип файла. Пожалуйста, выберите PDF файл'
+        error: 'Invalid file type. Please select a PDF file'
       };
     }
 
@@ -47,7 +47,7 @@ export class FileHandler implements IFileHandler {
     if (!fileName.endsWith(this.VALID_PDF_EXTENSION)) {
       return {
         isValid: false,
-        error: 'Неверное расширение файла. Требуется .pdf'
+        error: 'Invalid file extension. Required: .pdf'
       };
     }
 
@@ -74,12 +74,12 @@ export class FileHandler implements IFileHandler {
           this.temporaryData = event.target.result;
           resolve(event.target.result);
         } else {
-          reject(new Error('Не удалось прочитать файл'));
+          reject(new Error('Failed to read file'));
         }
       };
 
       reader.onerror = () => {
-        reject(new Error('Ошибка при чтении файла'));
+        reject(new Error('Error reading file'));
       };
 
       reader.readAsArrayBuffer(file);

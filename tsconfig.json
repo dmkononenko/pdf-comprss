@@ -1,9 +1,10 @@
 {
   "compilerOptions": {
     "target": "ES2020",
-    "lib": ["ES2020", "DOM"],
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "moduleResolution": "bundler",
+    "jsx": "preserve",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -14,9 +15,12 @@
     "types": ["chrome", "vitest/globals"],
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "~/*": ["src/*", "entrypoints/*"],
+      "@/*": ["src/*"],
+      "~~/*": ["./*"],
+      "@@/*": ["./*"]
     }
   },
-  "include": ["src/**/*", "tests/**/*"],
-  "exclude": ["node_modules", "dist"]
+  "include": ["src/**/*.vue", "src/**/*.ts", "src/**/*.tsx", "tests/**/*", "entrypoints/**/*", "wxt.config.ts"],
+  "exclude": ["node_modules", "dist", ".wxt"]
 }

@@ -73,7 +73,6 @@ export interface ErrorInfo {
 
 export enum ErrorCode {
   INVALID_FILE_TYPE = 'invalid_file_type',
-  FILE_TOO_LARGE = 'file_too_large',
   CORRUPTED_PDF = 'corrupted_pdf',
   COMPRESSION_FAILED = 'compression_failed',
   UNKNOWN_ERROR = 'unknown_error'
