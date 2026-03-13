@@ -36,7 +36,7 @@ watch(selectedLevel, (newValue) => {
 
 <template>
   <div class="space-y-2">
-    <p class="text-xs font-medium text-gray-700 dark:text-neutral-300">Compression level</p>
+    <p class="text-xs font-medium text-gray-700">Compression level</p>
     <div class="flex gap-2">
       <button
         v-for="level in levels"
@@ -45,13 +45,13 @@ watch(selectedLevel, (newValue) => {
         :class="[
           selectedLevel === level.value
             ? 'bg-blue-600 text-white shadow-md'
-            : 'bg-gray-100 dark:bg-neutral-800 text-gray-700 dark:text-neutral-300 hover:bg-gray-200 dark:hover:bg-neutral-700'
+            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
         ]"
         @click="selectedLevel = level.value"
       >
         {{ level.label }}
       </button>
     </div>
-    <p class="text-xs text-gray-500 dark:text-neutral-400">{{ levels.find(l => l.value === selectedLevel)?.description }}</p>
+    <p class="text-xs text-gray-500">{{ levels.find(l => l.value === selectedLevel)?.description }}</p>
   </div>
 </template>
