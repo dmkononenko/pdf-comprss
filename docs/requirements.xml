@@ -93,6 +93,40 @@
       </AcceptanceCriteria>
     </UC-008>
 
+    <!-- Theme requirements -->
+    <UC-009>
+      <Actor>User</Actor>
+      <Action>Selects a theme preference</Action>
+      <Goal>To customize the appearance of the extension</Goal>
+      <AcceptanceCriteria>
+        - User can select Light, Dark, or System theme
+        - Theme preference is saved in chrome.storage.local
+        - Theme preference persists across extension reloads
+      </AcceptanceCriteria>
+    </UC-009>
+
+    <UC-010>
+      <Actor>System</Actor>
+      <Action>Detects system theme preference</Action>
+      <Goal>To automatically apply user's system theme</Goal>
+      <AcceptanceCriteria>
+        - System theme is detected on first load if no preference saved
+        - Changes to system theme are reflected when System mode is selected
+        - Fallback to Light theme if system preference cannot be determined
+      </AcceptanceCriteria>
+    </UC-010>
+
+    <UC-011>
+      <Actor>User</Actor>
+      <Action>Toggles theme manually</Action>
+      <Goal>To quickly switch between theme modes</Goal>
+      <AcceptanceCriteria>
+        - Clicking toggle button cycles: Light → Dark → System → Light
+        - Visual feedback shows current theme with appropriate icon
+        - Theme changes smoothly with CSS transitions
+      </AcceptanceCriteria>
+    </UC-011>
+
   </UseCases>
 
   <Constraints>

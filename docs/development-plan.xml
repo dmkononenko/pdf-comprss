@@ -108,7 +108,7 @@
       <depends>none</depends>
     </M-UI-KIT>
 
-    <M-BACKGROUND NAME="Background" TYPE="ENTRY_POINT" LAYER="0" ORDER="6">
+    <M-BACKGROUND NAME="Background" TYPE="ENTRY_POINT" LAYER="0" ORDER="8">
       <contract>
         <purpose>Background service worker for extension lifecycle</purpose>
         <inputs>
@@ -123,6 +123,23 @@
       </interface>
       <depends>none</depends>
     </M-BACKGROUND>
+
+    <M-THEME-CSS NAME="ThemeCSS" TYPE="UTILITY" LAYER="0" ORDER="7">
+      <contract>
+        <purpose>CSS переменные для светлой и тёмной темы</purpose>
+        <inputs>
+          <param name="none" type="none" />
+        </inputs>
+        <outputs>
+          <param name="cssVariables" type="CSS custom properties" />
+        </outputs>
+      </contract>
+      <interface>
+        <export-root PURPOSE="CSS переменные светлой темы" />
+        <export-dark PURPOSE="CSS переменные тёмной темы" />
+      </interface>
+      <depends>none</depends>
+    </M-THEME-CSS>
 
     <!-- Layer 1 - Depends on Layer 0 -->
     <M-ERROR NAME="ErrorHandler" TYPE="UTILITY" LAYER="1" ORDER="1">
@@ -176,6 +193,29 @@
       <depends>M-TYPES</depends>
     </M-UI-SELECTOR>
 
+    <M-THEME-COMPOSABLE NAME="ThemeComposable" TYPE="UTILITY" LAYER="1" ORDER="4">
+      <contract>
+        <purpose>Реактивное управление темой с сохранением в chrome.storage</purpose>
+        <inputs>
+          <param name="none" type="none" />
+        </inputs>
+        <outputs>
+          <param name="theme" type="Ref of theme state" />
+          <param name="setTheme" type="Function to set theme" />
+          <param name="toggleTheme" type="Function to cycle theme" />
+        </outputs>
+      </contract>
+      <interface>
+        <export-useTheme PURPOSE="Main composable for theme management" />
+        <export-theme PURPOSE="Current theme ref" />
+        <export-resolvedTheme PURPOSE="Actual applied theme ref" />
+        <export-isDark PURPOSE="Boolean dark mode ref" />
+        <export-setTheme PURPOSE="Set theme function" />
+        <export-toggleTheme PURPOSE="Cycle theme function" />
+      </interface>
+      <depends>M-TYPES</depends>
+    </M-THEME-COMPOSABLE>
+
     <!-- Layer 2 - Depends on Layer 1 -->
     <M-FILEHANDLER NAME="FileHandler" TYPE="CORE_LOGIC" LAYER="2" ORDER="1">
       <contract>
@@ -224,8 +264,43 @@
       <depends>M-TYPES, M-ERROR</depends>
     </M-COMPRESSION>
 
+    <M-THEME-TOGGLE NAME="ThemeToggle" TYPE="UI_COMPONENT" LAYER="2" ORDER="3">
+      <contract>
+        <purpose>UI компонент для переключения темы с тремя состояниями</purpose>
+        <inputs>
+          <param name="click" type="Event" />
+        </inputs>
+        <outputs>
+          <param name="themeChange" type="Event to toggle theme" />
+        </outputs>
+      </contract>
+      <interface>
+        <export-default PURPOSE="Theme toggle button component" />
+        <export-SunIcon PURPOSE="Sun icon for light theme" />
+        <export-MoonIcon PURPOSE="Moon icon for dark theme" />
+        <export-SystemIcon PURPOSE="System icon for auto theme" />
+      </interface>
+      <depends>M-THEME-COMPOSABLE</depends>
+    </M-THEME-TOGGLE>
+
     <!-- Layer 3 - Entry Points -->
-    <M-SIDEPANEL NAME="SidePanel" TYPE="ENTRY_POINT" LAYER="3" ORDER="1">
+    <M-THEME-INTEGRATION NAME="ThemeIntegration" TYPE="INTEGRATION" LAYER="3" ORDER="1">
+      <contract>
+        <purpose>Интеграция системы тем в основное приложение</purpose>
+        <inputs>
+          <param name="theme" type="Ref of theme state" />
+        </inputs>
+        <outputs>
+          <param name="themedUI" type="VNode with theme applied" />
+        </outputs>
+      </contract>
+      <interface>
+        <export-App PURPOSE="Main app component with theme support" />
+      </interface>
+      <depends>M-THEME-COMPOSABLE, M-THEME-TOGGLE, M-THEME-CSS</depends>
+    </M-THEME-INTEGRATION>
+
+    <M-SIDEPANEL NAME="SidePanel" TYPE="ENTRY_POINT" LAYER="3" ORDER="2">
       <contract>
         <purpose>Main UI entry point - side panel with compression controls</purpose>
         <inputs>
@@ -239,7 +314,7 @@
         <export-App PURPOSE="Main Vue application component" />
         <export-main PURPOSE="Vue app initialization" />
       </interface>
-      <depends>M-COMPRESSION, M-FILEHANDLER, M-STATE, M-TYPES, M-UI-KIT, M-UI-SELECTOR, M-FORMATTERS</depends>
+      <depends>M-COMPRESSION, M-FILEHANDLER, M-STATE, M-TYPES, M-UI-KIT, M-UI-SELECTOR, M-FORMATTERS, M-THEME-INTEGRATION</depends>
     </M-SIDEPANEL>
 
   </Modules>
@@ -301,11 +376,19 @@
       <step-1 module="M-BACKGROUND">Background service worker</step-1>
     </Phase-4>
 
-    <!-- Future phases -->
-    <Phase-5 name="Enhancements" status="pending">
-      <step-1 module="M-SIDEPANEL">Dark theme support</step-1>
-      <step-2 module="M-COMPRESSION">Additional compression options</step-2>
+    <!-- Phase 5: Dark Theme -->
+    <Phase-5 name="Dark Theme" status="pending">
+      <step-1 module="M-THEME-CSS">CSS переменные для тем</step-1>
+      <step-2 module="M-THEME-COMPOSABLE">useTheme composable</step-2>
+      <step-3 module="M-THEME-TOGGLE">ThemeToggle компонент</step-3>
+      <step-4 module="M-THEME-INTEGRATION">Интеграция в App.vue</step-4>
+      <step-5 module="M-THEME-INTEGRATION">Обновление цветовых классов в компонентах</step-5>
     </Phase-5>
+
+    <!-- Phase 6: Enhancements -->
+    <Phase-6 name="Enhancements" status="pending">
+      <step-1 module="M-COMPRESSION">Additional compression options</step-1>
+    </Phase-6>
 
   </ImplementationOrder>
 

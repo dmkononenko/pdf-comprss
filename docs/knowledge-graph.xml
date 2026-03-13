@@ -7,7 +7,7 @@
     <M-SIDEPANEL NAME="SidePanel" TYPE="ENTRY_POINT">
       <purpose>Main UI entry point - side panel with compression controls</purpose>
       <path>entrypoints/sidepanel/</path>
-      <depends>M-COMPRESSION, M-FILEHANDLER, M-STATE, M-TYPES</depends>
+      <depends>M-COMPRESSION, M-FILEHANDLER, M-STATE, M-TYPES, M-THEME-INTEGRATION</depends>
       <annotations>
         <fn-App PURPOSE="Main Vue application component with compression workflow" />
         <fn-main PURPOSE="Vue app initialization and mounting" />
@@ -136,6 +136,49 @@
       </annotations>
     </M-LIB-UTILS>
 
+    <!-- Theme System -->
+    <M-THEME-CSS NAME="ThemeCSS" TYPE="UTILITY">
+      <purpose>CSS переменные для светлой и тёмной темы</purpose>
+      <path>entrypoints/sidepanel/style.css</path>
+      <depends>none</depends>
+      <annotations>
+        <var-root PURPOSE="CSS variables for light theme" />
+        <var-dark PURPOSE="CSS variables for dark theme" />
+      </annotations>
+    </M-THEME-CSS>
+
+    <M-THEME-COMPOSABLE NAME="ThemeComposable" TYPE="UTILITY">
+      <purpose>Реактивное управление темой с сохранением в chrome.storage</purpose>
+      <path>src/components/composables/useTheme.ts</path>
+      <depends>M-TYPES</depends>
+      <annotations>
+        <fn-useTheme PURPOSE="Main composable for theme management" />
+        <fn-setTheme PURPOSE="Set theme and save to storage" />
+        <fn-toggleTheme PURPOSE="Cycle through theme modes" />
+      </annotations>
+    </M-THEME-COMPOSABLE>
+
+    <M-THEME-TOGGLE NAME="ThemeToggle" TYPE="UI_COMPONENT">
+      <purpose>UI компонент для переключения темы с тремя состояниями</purpose>
+      <path>src/components/ThemeToggle.vue</path>
+      <depends>M-THEME-COMPOSABLE</depends>
+      <annotations>
+        <comp-ThemeToggle PURPOSE="Theme toggle button component" />
+        <comp-SunIcon PURPOSE="Sun icon for light theme" />
+        <comp-MoonIcon PURPOSE="Moon icon for dark theme" />
+        <comp-SystemIcon PURPOSE="System icon for auto theme" />
+      </annotations>
+    </M-THEME-TOGGLE>
+
+    <M-THEME-INTEGRATION NAME="ThemeIntegration" TYPE="INTEGRATION">
+      <purpose>Интеграция системы тем в основное приложение</purpose>
+      <path>entrypoints/sidepanel/App.vue</path>
+      <depends>M-THEME-COMPOSABLE, M-THEME-TOGGLE, M-THEME-CSS</depends>
+      <annotations>
+        <fn-App PURPOSE="Main app component with theme support" />
+      </annotations>
+    </M-THEME-INTEGRATION>
+
     <!-- Cross Links - Module Dependencies -->
     <CrossLink from="M-SIDEPANEL" to="M-COMPRESSION" relation="uses compression service" />
     <CrossLink from="M-SIDEPANEL" to="M-FILEHANDLER" relation="uses file handling" />
@@ -149,6 +192,14 @@
     <CrossLink from="M-STATE" to="M-TYPES" relation="uses types from" />
     <CrossLink from="M-ERROR" to="M-TYPES" relation="uses error codes from" />
     <CrossLink from="M-UI-SELECTOR" to="M-TYPES" relation="uses compression level enum" />
+
+    <!-- Theme System Cross Links -->
+    <CrossLink from="M-THEME-COMPOSABLE" to="M-TYPES" relation="uses types from" />
+    <CrossLink from="M-THEME-TOGGLE" to="M-THEME-COMPOSABLE" relation="uses theme state from" />
+    <CrossLink from="M-THEME-INTEGRATION" to="M-THEME-COMPOSABLE" relation="uses theme management from" />
+    <CrossLink from="M-THEME-INTEGRATION" to="M-THEME-TOGGLE" relation="contains toggle component" />
+    <CrossLink from="M-THEME-INTEGRATION" to="M-THEME-CSS" relation="applies CSS variables from" />
+    <CrossLink from="M-SIDEPANEL" to="M-THEME-INTEGRATION" relation="integrates theme system via" />
 
   </Project>
 </KnowledgeGraph>
