@@ -1,0 +1,154 @@
+<KnowledgeGraph>
+  <Project NAME="pdf-compressor-extension" VERSION="1.2.0">
+    <keywords>PDF, compression, browser-extension, chrome-extension, vue, typescript, wxt, pdf-lib, client-side, privacy, local-processing</keywords>
+    <annotation>PDF Compressor Extension - браузерное расширение для локального сжатия PDF файлов без отправки на сервер. Использует pdf.js для рендеринга страниц и pdf-lib для создания оптимизированного PDF. Обеспечивает конфиденциальность данных - все операции выполняются локально в браузере.</annotation>
+
+    <!-- Entry Points -->
+    <M-SIDEPANEL NAME="SidePanel" TYPE="ENTRY_POINT">
+      <purpose>Main UI entry point - side panel with compression controls</purpose>
+      <path>entrypoints/sidepanel/</path>
+      <depends>M-COMPRESSION, M-FILEHANDLER, M-STATE, M-TYPES</depends>
+      <annotations>
+        <fn-App PURPOSE="Main Vue application component with compression workflow" />
+        <fn-main PURPOSE="Vue app initialization and mounting" />
+      </annotations>
+    </M-SIDEPANEL>
+
+    <M-BACKGROUND NAME="Background" TYPE="ENTRY_POINT">
+      <purpose>Background service worker for extension lifecycle</purpose>
+      <path>entrypoints/background.ts</path>
+      <depends>none</depends>
+      <annotations>
+        <fn-main PURPOSE="Extension background initialization" />
+      </annotations>
+    </M-BACKGROUND>
+
+    <!-- Core Services -->
+    <M-COMPRESSION NAME="CompressionEngine" TYPE="CORE_LOGIC">
+      <purpose>Core PDF compression logic using pdf.js and pdf-lib</purpose>
+      <path>src/services/compressionEngine.ts</path>
+      <depends>M-TYPES, M-ERROR</depends>
+      <annotations>
+        <fn-compressPDF PURPOSE="Main compression pipeline - renders pages and creates optimized PDF" />
+        <fn-renderPage PURPOSE="Renders PDF page to canvas for compression" />
+        <fn-createOptimizedPDF PURPOSE="Creates new PDF with compressed images using pdf-lib" />
+      </annotations>
+    </M-COMPRESSION>
+
+    <M-FILEHANDLER NAME="FileHandler" TYPE="CORE_LOGIC">
+      <purpose>File validation, reading and download operations</purpose>
+      <path>src/services/fileHandler.ts</path>
+      <depends>M-TYPES, M-ERROR</depends>
+      <annotations>
+        <fn-validateFile PURPOSE="Validates PDF file type and constraints" />
+        <fn-readFile PURPOSE="Reads file as ArrayBuffer for processing" />
+        <fn-downloadFile PURPOSE="Triggers browser download of compressed file" />
+      </annotations>
+    </M-FILEHANDLER>
+
+    <M-STATE NAME="StateManager" TYPE="CORE_LOGIC">
+      <purpose>Application state management for compression workflow</purpose>
+      <path>src/services/stateManager.ts</path>
+      <depends>M-TYPES</depends>
+      <annotations>
+        <fn-createStateManager PURPOSE="Creates reactive state for compression process" />
+      </annotations>
+    </M-STATE>
+
+    <M-ERROR NAME="ErrorHandler" TYPE="UTILITY">
+      <purpose>Centralized error handling and user-friendly error messages</purpose>
+      <path>src/services/errorHandler.ts</path>
+      <depends>M-TYPES</depends>
+      <annotations>
+        <fn-handleError PURPOSE="Maps errors to user-friendly messages" />
+        <fn-getErrorMessage PURPOSE="Extracts readable error message from error codes" />
+      </annotations>
+    </M-ERROR>
+
+    <!-- Type Definitions -->
+    <M-TYPES NAME="Types" TYPE="UTILITY">
+      <purpose>TypeScript type definitions for the entire application</purpose>
+      <path>src/types/index.ts</path>
+      <depends>none</depends>
+      <annotations>
+        <type-CompressionOptions PURPOSE="Compression settings configuration" />
+        <type-CompressionResult PURPOSE="Output of compression operation" />
+        <type-AppState PURPOSE="Application state structure" />
+        <type-ErrorInfo PURPOSE="Error information structure" />
+        <type-FileInfo PURPOSE="File metadata structure" />
+        <enum-CompressionState PURPOSE="State machine states for compression workflow" />
+        <enum-ErrorCode PURPOSE="Error code enumeration" />
+        <enum-CompressionLevel PURPOSE="Preset compression levels" />
+      </annotations>
+    </M-TYPES>
+
+    <!-- UI Components -->
+    <M-UI-SELECTOR NAME="CompressionLevelSelector" TYPE="UI_COMPONENT">
+      <purpose>UI component for selecting compression preset</purpose>
+      <path>src/components/CompressionLevelSelector.vue</path>
+      <depends>M-TYPES</depends>
+      <annotations>
+        <fn-selectLevel PURPOSE="Emits selected compression level" />
+      </annotations>
+    </M-UI-SELECTOR>
+
+    <M-UI-KIT NAME="UIKit" TYPE="UI_COMPONENT">
+      <purpose>Shadcn-vue UI component library wrappers</purpose>
+      <path>src/components/ui/</path>
+      <depends>none</depends>
+      <annotations>
+        <comp-Button PURPOSE="Reusable button component" />
+        <comp-Card PURPOSE="Card container component" />
+        <comp-Progress PURPOSE="Progress bar component" />
+        <comp-Alert PURPOSE="Alert/notification component" />
+        <comp-Select PURPOSE="Dropdown select component" />
+        <comp-Slider PURPOSE="Range slider component" />
+        <comp-Switch PURPOSE="Toggle switch component" />
+      </annotations>
+    </M-UI-KIT>
+
+    <!-- Utilities -->
+    <M-FORMATTERS NAME="Formatters" TYPE="UTILITY">
+      <purpose>Data formatting utilities for display</purpose>
+      <path>src/utils/formatters.ts</path>
+      <depends>none</depends>
+      <annotations>
+        <fn-formatFileSize PURPOSE="Formats bytes to human-readable size" />
+        <fn-formatPercent PURPOSE="Formats compression ratio as percentage" />
+      </annotations>
+    </M-FORMATTERS>
+
+    <M-VALIDATORS NAME="Validators" TYPE="UTILITY">
+      <purpose>Input validation utility functions</purpose>
+      <path>src/utils/validators.ts</path>
+      <depends>none</depends>
+      <annotations>
+        <fn-validateInput PURPOSE="Generic input validation" />
+      </annotations>
+    </M-VALIDATORS>
+
+    <M-LIB-UTILS NAME="LibUtils" TYPE="UTILITY">
+      <purpose>Shared utility functions for library configuration</purpose>
+      <path>src/lib/utils.ts</path>
+      <depends>none</depends>
+      <annotations>
+        <fn-cn PURPOSE="Class name merger utility for Tailwind" />
+      </annotations>
+    </M-LIB-UTILS>
+
+    <!-- Cross Links - Module Dependencies -->
+    <CrossLink from="M-SIDEPANEL" to="M-COMPRESSION" relation="uses compression service" />
+    <CrossLink from="M-SIDEPANEL" to="M-FILEHANDLER" relation="uses file handling" />
+    <CrossLink from="M-SIDEPANEL" to="M-STATE" relation="manages state via" />
+    <CrossLink from="M-SIDEPANEL" to="M-UI-KIT" relation="renders UI components from" />
+    <CrossLink from="M-SIDEPANEL" to="M-UI-SELECTOR" relation="contains" />
+    <CrossLink from="M-COMPRESSION" to="M-TYPES" relation="uses types from" />
+    <CrossLink from="M-COMPRESSION" to="M-ERROR" relation="reports errors to" />
+    <CrossLink from="M-FILEHANDLER" to="M-TYPES" relation="uses types from" />
+    <CrossLink from="M-FILEHANDLER" to="M-ERROR" relation="reports errors to" />
+    <CrossLink from="M-STATE" to="M-TYPES" relation="uses types from" />
+    <CrossLink from="M-ERROR" to="M-TYPES" relation="uses error codes from" />
+    <CrossLink from="M-UI-SELECTOR" to="M-TYPES" relation="uses compression level enum" />
+
+  </Project>
+</KnowledgeGraph>

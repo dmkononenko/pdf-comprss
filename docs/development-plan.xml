@@ -1,0 +1,312 @@
+<DevelopmentPlan VERSION="1.2.0">
+  <Modules>
+    <!-- Layer 0 - No dependencies -->
+    <M-TYPES NAME="Types" TYPE="UTILITY" LAYER="0" ORDER="1">
+      <contract>
+        <purpose>TypeScript type definitions for the entire application</purpose>
+        <inputs>
+          <param name="none" type="none" />
+        </inputs>
+        <outputs>
+          <param name="CompressionOptions" type="interface" />
+          <param name="CompressionResult" type="interface" />
+          <param name="AppState" type="interface" />
+          <param name="ErrorInfo" type="interface" />
+          <param name="FileInfo" type="interface" />
+          <param name="CompressionState" type="enum" />
+          <param name="ErrorCode" type="enum" />
+          <param name="CompressionLevel" type="enum" />
+        </outputs>
+        <errors>
+          <error code="none" />
+        </errors>
+      </contract>
+      <interface>
+        <export-CompressionOptions PURPOSE="Compression settings configuration" />
+        <export-CompressionResult PURPOSE="Output of compression operation" />
+        <export-AppState PURPOSE="Application state structure" />
+        <export-ErrorInfo PURPOSE="Error information structure" />
+        <export-FileInfo PURPOSE="File metadata structure" />
+        <export-CompressionState PURPOSE="State machine states" />
+        <export-ErrorCode PURPOSE="Error codes enum" />
+        <export-CompressionLevel PURPOSE="Preset compression levels" />
+        <export-COMPRESSION_PRESETS PURPOSE="Level to options mapping" />
+      </interface>
+      <depends>none</depends>
+    </M-TYPES>
+
+    <M-LIB-UTILS NAME="LibUtils" TYPE="UTILITY" LAYER="0" ORDER="2">
+      <contract>
+        <purpose>Shared utility functions for library configuration</purpose>
+        <inputs>
+          <param name="classes" type="string array" />
+        </inputs>
+        <outputs>
+          <param name="mergedClassName" type="string" />
+        </outputs>
+      </contract>
+      <interface>
+        <export-cn PURPOSE="Class name merger utility for Tailwind" />
+      </interface>
+      <depends>none</depends>
+    </M-LIB-UTILS>
+
+    <M-FORMATTERS NAME="Formatters" TYPE="UTILITY" LAYER="0" ORDER="3">
+      <contract>
+        <purpose>Data formatting utilities for display</purpose>
+        <inputs>
+          <param name="bytes" type="number" />
+          <param name="ratio" type="number" />
+        </inputs>
+        <outputs>
+          <param name="formattedSize" type="string" />
+          <param name="formattedPercent" type="string" />
+        </outputs>
+      </contract>
+      <interface>
+        <export-formatFileSize PURPOSE="Formats bytes to human-readable size" />
+        <export-formatPercent PURPOSE="Formats compression ratio as percentage" />
+      </interface>
+      <depends>none</depends>
+    </M-FORMATTERS>
+
+    <M-VALIDATORS NAME="Validators" TYPE="UTILITY" LAYER="0" ORDER="4">
+      <contract>
+        <purpose>Input validation utility functions</purpose>
+        <inputs>
+          <param name="input" type="any" />
+        </inputs>
+        <outputs>
+          <param name="isValid" type="boolean" />
+        </outputs>
+      </contract>
+      <interface>
+        <export-validateInput PURPOSE="Generic input validation" />
+      </interface>
+      <depends>none</depends>
+    </M-VALIDATORS>
+
+    <M-UI-KIT NAME="UIKit" TYPE="UI_COMPONENT" LAYER="0" ORDER="5">
+      <contract>
+        <purpose>Shadcn-vue UI component library wrappers</purpose>
+        <inputs>
+          <param name="props" type="component-specific" />
+        </inputs>
+        <outputs>
+          <param name="renderedComponent" type="VNode" />
+        </outputs>
+      </contract>
+      <interface>
+        <export-Button PURPOSE="Reusable button component" />
+        <export-Card PURPOSE="Card container component" />
+        <export-Progress PURPOSE="Progress bar component" />
+        <export-Alert PURPOSE="Alert/notification component" />
+        <export-Select PURPOSE="Dropdown select component" />
+        <export-Slider PURPOSE="Range slider component" />
+        <export-Switch PURPOSE="Toggle switch component" />
+      </interface>
+      <depends>none</depends>
+    </M-UI-KIT>
+
+    <M-BACKGROUND NAME="Background" TYPE="ENTRY_POINT" LAYER="0" ORDER="6">
+      <contract>
+        <purpose>Background service worker for extension lifecycle</purpose>
+        <inputs>
+          <param name="none" type="none" />
+        </inputs>
+        <outputs>
+          <param name="backgroundInit" type="void" />
+        </outputs>
+      </contract>
+      <interface>
+        <export-main PURPOSE="Extension background initialization" />
+      </interface>
+      <depends>none</depends>
+    </M-BACKGROUND>
+
+    <!-- Layer 1 - Depends on Layer 0 -->
+    <M-ERROR NAME="ErrorHandler" TYPE="UTILITY" LAYER="1" ORDER="1">
+      <contract>
+        <purpose>Centralized error handling and user-friendly error messages</purpose>
+        <inputs>
+          <param name="error" type="Error | ErrorCode" />
+        </inputs>
+        <outputs>
+          <param name="errorInfo" type="ErrorInfo" />
+          <param name="errorMessage" type="string" />
+        </outputs>
+      </contract>
+      <interface>
+        <export-handleError PURPOSE="Maps errors to user-friendly messages" />
+        <export-getErrorMessage PURPOSE="Extracts readable error message from error codes" />
+      </interface>
+      <depends>M-TYPES</depends>
+    </M-ERROR>
+
+    <M-STATE NAME="StateManager" TYPE="CORE_LOGIC" LAYER="1" ORDER="2">
+      <contract>
+        <purpose>Application state management for compression workflow</purpose>
+        <inputs>
+          <param name="initialState" type="AppState" />
+        </inputs>
+        <outputs>
+          <param name="state" type="Reactive AppState" />
+          <param name="actions" type="StateActions" />
+        </outputs>
+      </contract>
+      <interface>
+        <export-createStateManager PURPOSE="Creates reactive state for compression process" />
+      </interface>
+      <depends>M-TYPES</depends>
+    </M-STATE>
+
+    <M-UI-SELECTOR NAME="CompressionLevelSelector" TYPE="UI_COMPONENT" LAYER="1" ORDER="3">
+      <contract>
+        <purpose>UI component for selecting compression preset</purpose>
+        <inputs>
+          <param name="modelValue" type="CompressionLevel" />
+        </inputs>
+        <outputs>
+          <param name="update:modelValue" type="CompressionLevel" />
+        </outputs>
+      </contract>
+      <interface>
+        <export-default PURPOSE="Compression level selector component" />
+      </interface>
+      <depends>M-TYPES</depends>
+    </M-UI-SELECTOR>
+
+    <!-- Layer 2 - Depends on Layer 1 -->
+    <M-FILEHANDLER NAME="FileHandler" TYPE="CORE_LOGIC" LAYER="2" ORDER="1">
+      <contract>
+        <purpose>File validation, reading and download operations</purpose>
+        <inputs>
+          <param name="file" type="File" />
+          <param name="data" type="Blob" />
+          <param name="filename" type="string" />
+        </inputs>
+        <outputs>
+          <param name="validationResult" type="ValidationResult" />
+          <param name="arrayBuffer" type="Promise of ArrayBuffer" />
+        </outputs>
+        <errors>
+          <error code="INVALID_FILE_TYPE" />
+          <error code="FILE_TOO_LARGE" />
+        </errors>
+      </contract>
+      <interface>
+        <export-validateFile PURPOSE="Validates PDF file type and constraints" />
+        <export-readFile PURPOSE="Reads file as ArrayBuffer for processing" />
+        <export-downloadFile PURPOSE="Triggers browser download of compressed file" />
+      </interface>
+      <depends>M-TYPES, M-ERROR</depends>
+    </M-FILEHANDLER>
+
+    <M-COMPRESSION NAME="CompressionEngine" TYPE="CORE_LOGIC" LAYER="2" ORDER="2">
+      <contract>
+        <purpose>Core PDF compression logic using pdf.js and pdf-lib</purpose>
+        <inputs>
+          <param name="pdfData" type="ArrayBuffer" />
+          <param name="options" type="CompressionOptions" />
+          <param name="onProgress" type="ProgressCallback" />
+        </inputs>
+        <outputs>
+          <param name="result" type="Promise of CompressionResult" />
+        </outputs>
+        <errors>
+          <error code="CORRUPTED_PDF" />
+          <error code="COMPRESSION_FAILED" />
+        </errors>
+      </contract>
+      <interface>
+        <export-compressPDF PURPOSE="Main compression pipeline" />
+      </interface>
+      <depends>M-TYPES, M-ERROR</depends>
+    </M-COMPRESSION>
+
+    <!-- Layer 3 - Entry Points -->
+    <M-SIDEPANEL NAME="SidePanel" TYPE="ENTRY_POINT" LAYER="3" ORDER="1">
+      <contract>
+        <purpose>Main UI entry point - side panel with compression controls</purpose>
+        <inputs>
+          <param name="userInteractions" type="Events" />
+        </inputs>
+        <outputs>
+          <param name="uiRender" type="VNode" />
+        </outputs>
+      </contract>
+      <interface>
+        <export-App PURPOSE="Main Vue application component" />
+        <export-main PURPOSE="Vue app initialization" />
+      </interface>
+      <depends>M-COMPRESSION, M-FILEHANDLER, M-STATE, M-TYPES, M-UI-KIT, M-UI-SELECTOR, M-FORMATTERS</depends>
+    </M-SIDEPANEL>
+
+  </Modules>
+
+  <DataFlow>
+    <!-- Main compression flow -->
+    <DF-COMPRESS NAME="PDF Compression Flow" TRIGGER="User selects file">
+      <step-1>User selects PDF file via file input</step-1>
+      <step-2>FileHandler.validateFile checks file type and size</step-2>
+      <step-3>FileHandler.readFile loads file as ArrayBuffer</step-3>
+      <step-4>CompressionEngine.compressPDF processes the PDF:
+        - Load PDF with pdf.js
+        - Render each page to canvas
+        - Compress canvas as JPEG
+        - Create new PDF with pdf-lib
+      </step-4>
+      <step-5>Return CompressionResult with statistics</step-5>
+      <step-6>FileHandler.downloadFile triggers download</step-6>
+    </DF-COMPRESS>
+
+    <!-- State management flow -->
+    <DF-STATE NAME="State Transition Flow" TRIGGER="User action or system event">
+      <step-1>IDLE - Initial state, waiting for file</step-1>
+      <step-2>VALIDATING - File being validated</step-2>
+      <step-3>LOADING - File being read into memory</step-3>
+      <step-4>COMPRESSING - Compression in progress</step-4>
+      <step-5>COMPLETED - Compression done, ready for download</step-5>
+      <step-6>ERROR - Error occurred, show message</step-6>
+    </DF-STATE>
+
+  </DataFlow>
+
+  <ImplementationOrder>
+    <!-- Phase 1: Foundation - Already implemented -->
+    <Phase-1 name="Foundation" status="done">
+      <step-1 module="M-TYPES">Type definitions</step-1>
+      <step-2 module="M-LIB-UTILS">Utility functions</step-2>
+      <step-3 module="M-FORMATTERS">Formatters</step-4>
+      <step-4 module="M-VALIDATORS">Validators</step-4>
+      <step-5 module="M-UI-KIT">UI component library</step-5>
+    </Phase-1>
+
+    <!-- Phase 2: Core Services - Already implemented -->
+    <Phase-2 name="Core Services" status="done">
+      <step-1 module="M-ERROR">Error handling</step-1>
+      <step-2 module="M-STATE">State management</step-2>
+      <step-3 module="M-FILEHANDLER">File operations</step-3>
+      <step-4 module="M-COMPRESSION">Compression engine</step-4>
+    </Phase-2>
+
+    <!-- Phase 3: UI Components - Already implemented -->
+    <Phase-3 name="UI Components" status="done">
+      <step-1 module="M-UI-SELECTOR">Compression level selector</step-1>
+      <step-2 module="M-SIDEPANEL">Main side panel application</step-2>
+    </Phase-3>
+
+    <!-- Phase 4: Entry Points - Already implemented -->
+    <Phase-4 name="Entry Points" status="done">
+      <step-1 module="M-BACKGROUND">Background service worker</step-1>
+    </Phase-4>
+
+    <!-- Future phases -->
+    <Phase-5 name="Enhancements" status="pending">
+      <step-1 module="M-SIDEPANEL">Dark theme support</step-1>
+      <step-2 module="M-COMPRESSION">Additional compression options</step-2>
+    </Phase-5>
+
+  </ImplementationOrder>
+
+</DevelopmentPlan>

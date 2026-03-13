@@ -1,0 +1,118 @@
+<RequirementsAnalysis VERSION="1.2.0">
+  <UseCases>
+    <!-- Main compression workflow -->
+    <UC-001>
+      <Actor>User</Actor>
+      <Action>Selects a PDF file for compression</Action>
+      <Goal>To compress a PDF file and reduce its size</Goal>
+      <AcceptanceCriteria>
+        - User can select PDF file via file picker
+        - Only PDF files are accepted
+        - File size is displayed before compression
+      </AcceptanceCriteria>
+    </UC-001>
+
+    <UC-002>
+      <Actor>User</Actor>
+      <Action>Chooses compression level</Action>
+      <Goal>To control the trade-off between file size and quality</Goal>
+      <AcceptanceCriteria>
+        - Three preset levels available: Low, Medium, High
+        - Each level has predefined quality and scale settings
+        - Selected level is clearly indicated in UI
+      </AcceptanceCriteria>
+    </UC-002>
+
+    <UC-003>
+      <Actor>System</Actor>
+      <Action>Compresses the PDF file locally</Action>
+      <Goal>To reduce file size without server upload</Goal>
+      <AcceptanceCriteria>
+        - All processing happens in browser
+        - No data is sent to external servers
+        - Progress is displayed during compression
+        - Original file remains unchanged
+      </AcceptanceCriteria>
+    </UC-003>
+
+    <UC-004>
+      <Actor>User</Actor>
+      <Action>Downloads the compressed PDF</Action>
+      <Goal>To save the compressed file locally</Goal>
+      <AcceptanceCriteria>
+        - Download starts automatically after compression
+        - Compression statistics are displayed
+        - User can see original vs compressed size
+      </AcceptanceCriteria>
+    </UC-004>
+
+    <!-- Error handling -->
+    <UC-005>
+      <Actor>System</Actor>
+      <Action>Handles invalid file types</Action>
+      <Goal>To prevent processing of non-PDF files</Goal>
+      <AcceptanceCriteria>
+        - Clear error message for invalid file types
+        - User can select a different file
+        - No crash or undefined behavior
+      </AcceptanceCriteria>
+    </UC-005>
+
+    <UC-006>
+      <Actor>System</Actor>
+      <Action>Handles corrupted PDF files</Action>
+      <Goal>To gracefully handle unreadable PDFs</Goal>
+      <AcceptanceCriteria>
+        - Clear error message for corrupted files
+        - Error code is specific to the issue
+        - User can try a different file
+      </AcceptanceCriteria>
+    </UC-006>
+
+    <!-- UI requirements -->
+    <UC-007>
+      <Actor>User</Actor>
+      <Action>Views compression progress</Action>
+      <Goal>To understand how long compression will take</Goal>
+      <AcceptanceCriteria>
+        - Progress bar shows completion percentage
+        - Status text indicates current operation
+        - UI remains responsive during compression
+      </AcceptanceCriteria>
+    </UC-008>
+
+    <UC-008>
+      <Actor>User</Actor>
+      <Action>Views compression results</Action>
+      <Goal>To see the effectiveness of compression</Goal>
+      <AcceptanceCriteria>
+        - Original size displayed
+        - Compressed size displayed
+        - Compression ratio/percentage shown
+        - Results clearly formatted and readable
+      </AcceptanceCriteria>
+    </UC-008>
+
+  </UseCases>
+
+  <Constraints>
+    <CONSTR-001>
+      <Title>Client-side only processing</Title>
+      <Description>All PDF processing must happen in the browser. No server uploads.</Description>
+      <Rationale>Privacy and data security - user files never leave their device</Rationale>
+    </CONSTR-001>
+
+    <CONSTR-002>
+      <Title>Browser extension context</Title>
+      <Description>Must work as Chrome/Firefox extension with side panel UI</Description>
+      <Rationale>Convenient access without switching tabs</Rationale>
+    </CONSTR-002>
+
+    <CONSTR-003>
+      <Title>File size limits</Title>
+      <Description>Browser memory limits apply - very large files may fail</Description>
+      <Rationale>Browser extension memory constraints</Rationale>
+    </CONSTR-003>
+  </Constraints>
+
+</RequirementsAnalysis>
